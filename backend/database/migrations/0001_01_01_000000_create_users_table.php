@@ -18,7 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->decimal('hourly_rate', 10, 2)->nullable()->comment('人件費単価（円/時間）');
+            $table->boolean('is_valid')->default(true)->comment('有効・無効');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
