@@ -10,7 +10,12 @@
       "Bash(sudo tee:*)",
       "Bash(sudo apt-get update:*)",
       "Bash(sudo apt-get install:*)",
-      "Bash(sudo rm:*)"
+      "Bash(sudo rm:*)",
+      "Bash(sudo apt update:*)",
+      "Bash(sudo apt install:*)",
+      "Bash(gh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
