@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php artisan:*)"
+      "Bash(php artisan:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(curl:*)",
+      "Bash(sudo dd:*)",
+      "Bash(sudo chmod:*)",
+      "Bash(sudo tee:*)",
+      "Bash(sudo apt-get update:*)",
+      "Bash(sudo apt-get install:*)",
+      "Bash(sudo rm:*)"
     ],
     "deny": [],
     "ask": []
