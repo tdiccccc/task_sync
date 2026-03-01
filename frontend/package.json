@@ -7,17 +7,40 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "generate:openapi": "tsx src/openapi/generate-openapi.ts",
+    "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:stylelint",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier --check .",
+    "lint:stylelint": "stylelint \"**/*.{css,scss,vue}\"",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "format:eslint": "eslint . --fix",
+    "format:prettier": "prettier --write .",
+    "format:stylelint": "stylelint \"**/*.{css,scss,vue}\" --fix"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.4.1",
     "nuxt": "^4.2.1",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3",
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@nuxt/eslint": "^1.15.2",
+    "@types/node": "^25.3.3",
+    "eslint": "^9.39.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "json-schema-to-openapi-schema": "^0.4.0",
+    "postcss-html": "^1.8.1",
+    "prettier": "^3.8.1",
+    "stylelint": "^17.4.0",
+    "stylelint-config-recommended-vue": "^1.6.1",
+    "stylelint-config-standard": "^40.0.0",
     "ts-json-schema-generator": "^2.4.0",
+    "tsx": "^4.21.0",
+    "typescript-eslint": "^8.56.1",
+    "yaml": "^2.8.2",
     "zod-to-json-schema": "^3.25.0"
   }
 }
