@@ -15,7 +15,16 @@
       "Bash(sudo apt install:*)",
       "Bash(gh:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run postinstall:*)",
+      "Bash(npx nuxi module add eslint)",
+      "Bash(npm run format:prettier:*)",
+      "Bash(npm run lint:eslint:*)",
+      "Bash(npm run lint:prettier:*)",
+      "Bash(npm run lint:stylelint:*)",
+      "Bash(npm run generate:openapi:*)"
     ],
     "deny": [],
     "ask": []
