@@ -40,7 +40,7 @@ export const CreateProjectRequestSchema = z
 /**
  * プロジェクト作成レスポンスのスキーマ
  */
-export const projectResponseSchema = z.object({
+export const CreateProjectResponseSchema = z.object({
   id: z.number(),
   name: z.string(),
   amount: z.number(),
@@ -60,4 +60,4 @@ export type CreateProjectRequest = z.infer<typeof CreateProjectRequestSchema>
 /**
  * プロジェクトレスポンスの型
  */
-export type ProjectResponse = z.infer<typeof projectResponseSchema>
+export type CreateProjectResponse = z.infer<typeof CreateProjectResponseSchema>
