@@ -4,6 +4,9 @@ import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { DateTimeSchema } from '../base/shared/DateTimeSchema'
 extendZodWithOpenApi(z)
 
+/**
+ * プロジェクト作成リクエストのスキーマ
+ */
 export const CreateProjectRequestSchema = z
   .object({
     name: z
@@ -34,4 +37,27 @@ export const CreateProjectRequestSchema = z
   })
   .openapi('CreateProjectRequest')
 
+/**
+ * プロジェクト作成レスポンスのスキーマ
+ */
+export const projectResponseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  amount: z.number(),
+  description: z.string(),
+  started_at: z.string().nullable(),
+  ended_at: z.string().nullable(),
+  is_active: z.boolean(),
+  created_at: z.string(),
+  updated_at: z.string(),
+})
+
+/**
+ * プロジェクト作成リクエストの型
+ */
 export type CreateProjectRequest = z.infer<typeof CreateProjectRequestSchema>
+
+/**
+ * プロジェクトレスポンスの型
+ */
+export type ProjectResponse = z.infer<typeof projectResponseSchema>
