@@ -24,7 +24,8 @@
       "Bash(npm run lint:eslint:*)",
       "Bash(npm run lint:prettier:*)",
       "Bash(npm run lint:stylelint:*)",
-      "Bash(npm run generate:openapi:*)"
+      "Bash(npm run generate:openapi:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []

@@ -4,9 +4,9 @@ import {
   OpenAPIRegistry,
 } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
-import * as fs from 'fs'
+import * as fs from 'node:fs'
 import * as yaml from 'yaml'
-import { CreateProjectRequestSchema } from './schemas/api/project.ts'
+import { CreateProjectRequestSchema } from './schemas/api/project'
 
 // Zodを拡張
 extendZodWithOpenApi(z)
@@ -60,7 +60,7 @@ registry.registerPath({
         'application/json': {
           schema: z.object({
             message: z.string(),
-            errors: z.record(z.array(z.string())),
+            errors: z.record(z.string(), z.array(z.string())),
           }),
         },
       },
