@@ -14,8 +14,6 @@
       "Bash(sudo apt update:*)",
       "Bash(sudo apt install:*)",
       "Bash(gh:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
       "Bash(npm install:*)",
       "Bash(npm run lint)",
       "Bash(npm run postinstall:*)",
