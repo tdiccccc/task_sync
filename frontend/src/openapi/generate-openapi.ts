@@ -6,7 +6,7 @@ import {
 import { z } from 'zod'
 import * as fs from 'node:fs'
 import * as yaml from 'yaml'
-import { CreateProjectRequestSchema } from './schemas/api/project'
+import { CreateProjectRequestSchema, projectResponseSchema } from './schemas/api/project'
 
 // Zodを拡張
 extendZodWithOpenApi(z)
@@ -40,17 +40,7 @@ registry.registerPath({
       description: 'プロジェクト作成成功',
       content: {
         'application/json': {
-          schema: z.object({
-            id: z.number(),
-            name: z.string(),
-            amount: z.number(),
-            description: z.string(),
-            started_at: z.string().nullable(),
-            ended_at: z.string().nullable(),
-            is_active: z.boolean(),
-            created_at: z.string(),
-            updated_at: z.string(),
-          }),
+          schema: projectResponseSchema,
         },
       },
     },
