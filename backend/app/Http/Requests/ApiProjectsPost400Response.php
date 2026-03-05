@@ -46,5 +46,24 @@ class ApiProjectsPost400Response extends FormRequest
             'errors.required' => 'は必須です',
         ];
     }
+
+    // --- Getters ---
+
+    /**
+     * Get message
+     */
+    public function getMessage(): string
+    {
+        return $this->input('message');
+    }
+
+    /**
+     * Get errors
+     */
+    public function getErrors(): mixed
+    {
+        return $this->input('errors');
+    }
+
 }
 

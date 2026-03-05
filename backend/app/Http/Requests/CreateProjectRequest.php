@@ -57,5 +57,56 @@ class CreateProjectRequest extends FormRequest
             'description.max' => '案件の概要は500文字以内で入力してください',
         ];
     }
+
+    // --- Getters ---
+
+    /**
+     * Get name
+     */
+    public function getName(): string
+    {
+        return $this->input('name');
+    }
+
+    /**
+     * Get amount
+     */
+    public function getAmount(): float
+    {
+        return $this->input('amount');
+    }
+
+    /**
+     * Get description
+     */
+    public function getDescription(): string
+    {
+        return $this->input('description');
+    }
+
+    /**
+     * Get started_at
+     */
+    public function getStartedAt(): ?string
+    {
+        return $this->input('started_at');
+    }
+
+    /**
+     * Get ended_at
+     */
+    public function getEndedAt(): ?string
+    {
+        return $this->input('ended_at');
+    }
+
+    /**
+     * Get is_active
+     */
+    public function getIsActive(): ?bool
+    {
+        return $this->input('is_active');
+    }
+
 }
 
