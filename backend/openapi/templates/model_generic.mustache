@@ -71,4 +71,17 @@ class {{classname}} extends FormRequest
 {{/vars}}
         ];
     }
+
+    // --- Getters ---
+
+{{#vars}}
+    /**
+     * Get {{name}}
+     */
+    public function {{getter}}(): {{^required}}?{{/required}}{{#isString}}string{{/isString}}{{#isInteger}}int{{/isInteger}}{{#isNumeric}}float{{/isNumeric}}{{#isBoolean}}bool{{/isBoolean}}{{#isDateTime}}string{{/isDateTime}}{{#isDate}}string{{/isDate}}{{#isArray}}array{{/isArray}}{{#isFreeFormObject}}mixed{{/isFreeFormObject}}
+    {
+        return $this->input('{{name}}');
+    }
+
+{{/vars}}
 }
