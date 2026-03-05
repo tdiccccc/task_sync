@@ -17,4 +17,11 @@ if [ -f package.json ]; then
   npm install
 fi
 
+echo "🐳 Install Docker CLI for Docker-in-Docker"
+if ! command -v docker &> /dev/null; then
+  sudo apt-get update
+  sudo apt-get install -y docker.io
+  sudo usermod -aG docker vscode || true
+fi
+
 echo "🎉 Devcontainer setup completed!"

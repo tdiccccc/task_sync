@@ -1,6 +1,9 @@
 # .devcontainer/Dockerfile
 FROM mcr.microsoft.com/devcontainers/php:8.4
 
+# Yarn リポジトリを削除（ベースイメージに含まれるが GPG 鍵が無く apt-get update が失敗するため）
+RUN rm -f /etc/apt/sources.list.d/yarn.list
+
 # Node.js インストール（20系）
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get update \
