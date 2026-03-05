@@ -49,6 +49,9 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "generate:requests": [
+            "bash openapi/generate-requests.sh"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

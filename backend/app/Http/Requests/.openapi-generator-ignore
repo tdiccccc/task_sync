@@ -1,0 +1,31 @@
+# OpenAPI Generator Ignore File
+# このファイルでFormRequest以外の生成物を除外
+# パスは出力ディレクトリ（backend/）からの相対パス
+
+# supportingFiles（不要な補助ファイル）
+app/Http/ApiException.php
+app/Http/Configuration.php
+app/Http/HeaderSelector.php
+app/Http/ObjectSerializer.php
+app/Http/Requests/ModelInterface.php
+
+# ドキュメント
+docs/**
+README.md
+
+# ビルド・CI設定
+composer.json
+composer.lock
+.gitignore
+git_push.sh
+phpunit.xml.dist
+.php-cs-fixer.dist.php
+.php_cs.dist
+.travis.yml
+
+# テスト
+test/**
+
+# OpenAPI Generator メタデータ
+.openapi-generator/**
+.openapi-generator-ignore

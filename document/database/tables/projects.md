@@ -18,8 +18,8 @@
 | ----------- | --------------- | ---- | ---------- | ------ | ------------------------------ |
 | id          | bigint unsigned | NO   | -          | PK, AI | プロジェクト ID                |
 | name        | varchar(255)    | NO   | -          | -      | 案件名                         |
-| amount      | decimal(12,2)   | YES  | NULL       | -      | 受注金額（税抜 or 税込は運用）  |
-| description | text            | YES  | NULL       | -      | 案件の概要                     |
+| amount      | decimal(12,2)   | NO   | NULL       | -      | 受注金額（税抜 or 税込は運用） |
+| description | text            | NO   | NULL       | -      | 案件の概要                     |
 | started_at  | datetime        | YES  | NULL       | -      | 着手日                         |
 | ended_at    | datetime        | YES  | NULL       | -      | 完了日                         |
 | is_active   | boolean         | NO   | true       | -      | 進行中フラグ                   |

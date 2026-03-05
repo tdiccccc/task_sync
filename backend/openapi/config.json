@@ -1,0 +1,15 @@
+{
+  "globalProperties": {
+    "models": "",
+    "apis": "false",
+    "apiDocs": "false",
+    "modelDocs": "false",
+    "apiTests": "false",
+    "modelTests": "false"
+  },
+  "modelPackage": "Requests",
+  "srcBasePath": "app/Http/",
+  "invokerPackage": "App\\Http\\Requests",
+  "variableNamingConvention": "snake_case",
+  "enumPropertyNaming": "UPPERCASE"
+}
