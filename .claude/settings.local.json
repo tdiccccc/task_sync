@@ -23,7 +23,14 @@
       "Bash(npm run lint:prettier:*)",
       "Bash(npm run lint:stylelint:*)",
       "Bash(npm run generate:openapi:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(docker:*)",
+      "Bash(bash openapi/generate-requests.sh:*)",
+      "Bash(getent group docker 2>/dev/null || echo \"docker group does not exist\")",
+      "Bash(sudo -n echo \"sudo available\" 2>/dev/null || echo \"sudo not available without password\")",
+      "Bash(sudo chgrp docker /var/run/docker.sock)",
+      "Bash(cd /workspace/backend && sg docker -c \"bash openapi/generate-requests.sh\")",
+      "Skill(git:commit)"
     ],
     "deny": [],
     "ask": []
