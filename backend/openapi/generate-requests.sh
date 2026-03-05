@@ -50,9 +50,9 @@ docker run --rm \
   generate \
   -i /local/openapi/openapi.yaml \
   -g php \
-  -o /local/app/Http \
+  -o /local \
   -c /local/openapi/config.json \
   -t /local/openapi/templates \
-  --global-property models,supportingFiles
+  --global-property models
 
 echo "✅ FormRequestの生成が完了しました: backend/app/Http/Requests/"
