@@ -87,7 +87,7 @@ docker compose down
 | ------------------ | ---------------------- | -------------------------------------------------------- | -------------------- |
 | **Domain**         | `app/Domains`          | ビジネスロジック、エンティティ、ドメインサービス、リポジトリインターフェース | なし (コアレイヤー)    |
 | **Application**    | `app/Application`      | ユースケース、アプリケーションサービス、トランザクション管理             | Domainレイヤーのみ    |
-| **Infrastructure** | `app/Infrastructure`   | リポジトリ実装、外部APIクライアント、技術的詳細                      | Application + Domain |
+| **Infrastructure** | `app/Infrastructure`   | リポジトリ実装、外部APIクライアント、技術的詳細                      | Domainレイヤーのみ    |
 | **Presentation**   | `app/Http/Controllers` | HTTPリクエスト処理、レスポンス生成、OpenAPI仕様                    | 全レイヤー           |
 
 **重要な原則**: 依存関係は内側を向く。Domainレイヤーは外部依存を持たない。InfrastructureとPresentationは内側のレイヤーに依存し、その逆はない。

@@ -25,3 +25,6 @@ Thumbs.db
 
 # OpenAPI Generator
 /openapi/openapi-generator-cli.jar
+
+# 学習ドキュメント (個人メモ)
+/document/leaning/
