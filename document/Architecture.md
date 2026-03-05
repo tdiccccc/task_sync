@@ -98,3 +98,119 @@ sequenceDiagram
 | Application | `app/Application` | ユースケース実装、トランザクション管理 | Domain のみ |
 | Domain | `app/Domains` | ビジネスロジック、エンティティ、ドメインサービス | なし（コアレイヤー） |
 | Infrastructure | `app/Infrastructure` | DB実装、外部API連携、技術的詳細 | Domain のみ |
+
+**重要**: 依存関係は常に内側を向きます。Domain レイヤーは外部依存を持ちません。
+
+## レイヤー詳細
+
+### Presentation（`app/Http`）
+
+#### 責務
+
+- 認証/認可チェック
+- リクエストデータ(Json)→PHPデータ型への変換
+- PHPデータ型→レスポンスデータ(Json)への変換
+- リクエストデータのバリデーション処理
+- レスポンスデータのバリデーション処理
+- Applicationの呼び出し
+    - 原則 Controller 1 method につき Application 1 method とする
+        - 更新後の再取得時にQueryServiceを呼び出すのはOK
+    - 1コントローラー1メソッド（\_\_invoke）とする
+    ```php
+        class GetListController {}
+        class CreateController {}
+        class UpdateController {}
+        class DeleteController {}
+    ```
+    ```
+    Controllers/
+        Project/
+            GetListController.php    ← 一覧取得
+            CreateController.php     ← 案件作成
+            UpdateController.php     ← 案件更新
+            DeleteController.php     ← 案件削除
+    ```
+
+#### 責務違反
+
+- Domainの呼び出し
+- Infrastructureの呼び出し
+- 他集約のPresentation呼び出し
+- DB直接アクセス
+- ビジネスロジック記述
+
+### Application（`app/Application`）
+
+#### UseCase (Command)
+
+**責務**
+
+- Infrastructureの呼び出し
+- Domainの呼び出し
+    - Entity, ValueObject の生成
+    - Entity の公開メソッド実行
+        - Domain Factory が存在する場合, Entity の createファクトリメソッドは呼び出し禁止
+    - Domain Factory の実行
+    - Domain Service の実行
+
+**責務違反**
+
+- Presentationの呼び出し
+- 他集約のUseCase/QueryServiceの呼び出し
+- 集約をまたいだデータの取得
+- DB直接アクセス
+- ビジネスロジック記述
+
+### Domain（`app/Domains`）
+
+#### Entity
+
+- 一意にデータを識別できる最小単位
+- Identifier を必ずメンバーに持つ
+- 他集約のEntityやValueObjectをメンバーに持つ
+- 他集約のEntityやValueObjectに関するバリデーションをconstructor内で行う
+- 完全イミュータブル
+
+#### ValueObject
+
+- 一意に識別する必要のないデータ
+- Identifier は持たない
+- Entity に属する場合もあるし、属さない場合もある
+- 値に関するバリデーションをconstructor内で行う
+- 完全イミュータブル
+
+#### DomainService
+
+- Entity に記載すると不自然な処理やビジネスロジックを記述する
+    - e.x. Entity の存在チェック
+- ドメイン貧血症になるため原則使用禁止
+    - 可能な限りEntityにビジネスロジックを持たせること
+
+#### Factory
+
+- Entity や ValueObject の生成ロジックを記述
+- 下記の場合にFactoryを検討する
+    - Entity/ValueObject 生成条件やロジックが複雑な場合
+    - 生成条件を Entity/ValueObject に記述したいが不自然な場合
+        - e.x. EntityId の採番処理
+
+### Infrastructure（`app/Infrastructure`）
+
+#### 責務
+
+- DBアクセス
+    - MySQL, Redis など
+- 外部API/サービスへのアクセス
+    - AWS S3
+    - Slack API
+- Email送信
+    - SMTP通信
+- Domainの呼び出し
+    - Entity の永続化/復元
+    - Entity の取得/削除
+
+#### 責務違反
+
+- Presentationの呼び出し
+- Applicationの呼び出し
+- 他集約のInfrastructure呼び出し
