@@ -62,9 +62,11 @@ graph LR
             end
             App[Use Cases / Application Services]
         end
-        Infra[Controllers / Repositories / External APIs]
+        Infra[Repositories / External APIs]
     end
+    Pres[Controllers]
 
+    Pres --> App
     Infra --> App --> Core
 ```
 
@@ -90,9 +92,9 @@ sequenceDiagram
 
 ## ディレクトリとレイヤーの対応
 
-| レイヤー | ディレクトリ | 責務 |
-|---------|-------------|------|
-| Presentation | `app/Http/Controllers` | HTTPリクエスト処理、レスポンス生成 |
-| Application | `app/Application` | ユースケース実装、トランザクション管理 |
-| Domain | `app/Domains` | ビジネスロジック、エンティティ、ドメインサービス |
-| Infrastructure | `app/Infrastructure` | DB実装、外部API連携、技術的詳細 |
+| レイヤー | ディレクトリ | 責務 | 依存先 |
+|---------|-------------|------|--------|
+| Presentation | `app/Http/Controllers` | HTTPリクエスト処理、レスポンス生成 | 全レイヤー |
+| Application | `app/Application` | ユースケース実装、トランザクション管理 | Domain のみ |
+| Domain | `app/Domains` | ビジネスロジック、エンティティ、ドメインサービス | なし（コアレイヤー） |
+| Infrastructure | `app/Infrastructure` | DB実装、外部API連携、技術的詳細 | Domain のみ |
