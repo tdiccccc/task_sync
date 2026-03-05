@@ -1,0 +1,87 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{invokerPackage}};
+
+use Illuminate\Foundation\Http\FormRequest;
+
+/**
+ * {{classname}}
+ {{#description}}
+ *
+ * {{description}}
+ {{/description}}
+ */
+class {{classname}} extends FormRequest
+{
+    /**
+     * このリクエストの認可ロジック
+     */
+    public function authorize(): bool
+    {
+        // 必要に応じて認可ロジックを実装
+        return true;
+    }
+
+    /**
+     * バリデーションルール
+     *
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+{{#vars}}
+            '{{name}}' => [{{#required}}'required'{{/required}}{{^required}}'nullable'{{/required}}{{#isString}}, 'string'{{/isString}}{{#isInteger}}, 'integer'{{/isInteger}}{{#isNumeric}}, 'numeric'{{/isNumeric}}{{#isBoolean}}, 'boolean'{{/isBoolean}}{{#isDate}}, 'date'{{/isDate}}{{#isDateTime}}, 'date_format:Y-m-d\TH:i:s\Z,Y-m-d\TH:i:sP'{{/isDateTime}}{{#isArray}}, 'array'{{/isArray}}{{#maxLength}}, 'max:{{maxLength}}'{{/maxLength}}{{#minLength}}, 'min:{{minLength}}'{{/minLength}}{{#minimum}}, 'min:{{minimum}}'{{/minimum}}{{#maximum}}, 'max:{{maximum}}'{{/maximum}}{{#pattern}}, 'regex:/{{pattern}}/'{{/pattern}}],
+{{/vars}}
+        ];
+    }
+
+    /**
+     * バリデーションエラーメッセージのカスタマイズ
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+{{#vars}}
+{{#required}}
+            '{{name}}.required' => '{{description}}は必須です',
+{{/required}}
+{{#isString}}
+            '{{name}}.string' => '{{description}}は文字列である必要があります',
+{{/isString}}
+{{#isInteger}}
+            '{{name}}.integer' => '{{description}}は整数である必要があります',
+{{/isInteger}}
+{{#isNumeric}}
+            '{{name}}.numeric' => '{{description}}は数値である必要があります',
+{{/isNumeric}}
+{{#maxLength}}
+            '{{name}}.max' => '{{description}}は{{maxLength}}文字以内で入力してください',
+{{/maxLength}}
+{{#minLength}}
+            '{{name}}.min' => '{{description}}は{{minLength}}文字以上で入力してください',
+{{/minLength}}
+{{#minimum}}
+            '{{name}}.min' => '{{description}}は{{minimum}}以上である必要があります',
+{{/minimum}}
+{{/vars}}
+        ];
+    }
+
+    // --- Getters ---
+
+{{#vars}}
+    /**
+     * Get {{name}}
+     */
+    public function {{getter}}(): {{^required}}?{{/required}}{{#isString}}string{{/isString}}{{#isInteger}}int{{/isInteger}}{{#isNumeric}}float{{/isNumeric}}{{#isBoolean}}bool{{/isBoolean}}{{#isDateTime}}string{{/isDateTime}}{{#isDate}}string{{/isDate}}{{#isArray}}array{{/isArray}}{{#isFreeFormObject}}mixed{{/isFreeFormObject}}
+    {
+        return $this->input('{{name}}');
+    }
+
+{{/vars}}
+}
