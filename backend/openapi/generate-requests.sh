@@ -1,31 +1,35 @@
 #!/bin/bash
 
 # OpenAPI仕様からLaravel FormRequestを自動生成するスクリプト
+# Docker経由でopenapi-generator-cliを実行
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="$(dirname "$SCRIPT_DIR")"
-JAR_PATH="${SCRIPT_DIR}/openapi-generator-cli.jar"
 VERSION="7.4.0"
 
 echo "🚀 FormRequest自動生成を開始します..."
 
-# jarファイルが存在しない場合はダウンロード
-if [ ! -f "$JAR_PATH" ]; then
-    echo "📥 openapi-generator-cli.jar をダウンロード中..."
-    curl -L "https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/${VERSION}/openapi-generator-cli-${VERSION}.jar" -o "$JAR_PATH"
-    echo "✅ ダウンロード完了"
+# Dockerコマンドが使用可能か確認
+if ! command -v docker &> /dev/null; then
+    echo "❌ Dockerが見つかりません"
+    echo "Docker CLIをインストールするか、devcontainerを再起動してください"
+    exit 1
 fi
 
-# FormRequestを生成
+# FormRequestを生成（Docker経由）
 cd "$BACKEND_DIR"
-java -jar "$JAR_PATH" generate \
-  -i openapi/openapi.yaml \
+docker run --rm \
+  -v "${BACKEND_DIR}:/workspace" \
+  -w /workspace \
+  openapitools/openapi-generator-cli:v${VERSION} \
+  generate \
+  -i /workspace/openapi/openapi.yaml \
   -g php \
-  -o app/Http \
-  -c openapi/config.json \
-  -t openapi/templates \
+  -o /workspace/app/Http \
+  -c /workspace/openapi/config.json \
+  -t /workspace/openapi/templates \
   --global-property models,supportingFiles
 
 echo "✅ FormRequestの生成が完了しました: backend/app/Http/Requests/"
