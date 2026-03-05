@@ -50,7 +50,8 @@ DB_PASSWORD=
 | `composer dev`                            | 全サービス起動（Laravel サーバー、キュー、ログ、Vite） |
 | `composer test`                           | テスト実行                                             |
 | `php artisan test --filter=TestClassName` | 単一テストファイル実行                                 |
-| `./vendor/bin/pint`                       | コードフォーマット（Laravel Pint）                     |
+| `composer fix`                            | コードフォーマット自動修正（php-cs-fixer）             |
+| `composer fix:check`                      | フォーマット差分確認（dry-run）                        |
 | `php artisan migrate`                     | マイグレーション実行                                   |
 | `php artisan migrate:fresh`               | 全テーブル削除後に再マイグレーション                   |
 | `php artisan db:seed`                     | シーダー実行                                           |
@@ -75,8 +76,16 @@ DB_PASSWORD=
 
 ### コードフォーマット
 
-- [Laravel Pint](https://laravel.com/docs/pint) を使用（デフォルトルール）
-- コミット前に必ず `./vendor/bin/pint` を実行してください
+- [php-cs-fixer](https://cs.symfony.com/) を使用（設定: `.php-cs-fixer.dist.php`）
+- コミット前に必ず `composer fix` を実行してください
+- `composer fix:check` でフォーマット違反の差分を確認できます（CI 向け）
+
+主なルール:
+- PSR-12 準拠
+- `declare(strict_types=1)` 必須
+- 未使用 import の自動削除、アルファベット順ソート
+- trailing comma（配列・引数・パラメータ）
+- クラス要素の順序統一（trait → 定数 → プロパティ → コンストラクタ → メソッド）
 
 ### テスト
 
