@@ -4,6 +4,30 @@ FROM mcr.microsoft.com/devcontainers/php:8.4
 # Yarn リポジトリを削除（ベースイメージに含まれるが GPG 鍵が無く apt-get update が失敗するため）
 RUN rm -f /etc/apt/sources.list.d/yarn.list
 
+# 必要なパッケージのインストール
+RUN apt-get update \
+    && apt-get install -y \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zlib1g-dev \
+    libmcrypt-dev \
+    libxi6 \
+    curl \
+    git \
+    unzip \
+    vim \
+    gnupg \
+    libreoffice \
+    fonts-ipafont-gothic \
+    libicu-dev \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# PHPの拡張モジュールをインストール
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd pdo_mysql bcmath zip intl
+
 # Node.js インストール（20系）
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get update \
