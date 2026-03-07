@@ -50,6 +50,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_users');
     }
 
+    /**
+     * 指定したロールを持っているか判定
+     */
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles->contains('name', $roleName);
+    }
+
     public function createdTasks(): HasMany
     {
         return $this->hasMany(Task::class, 'created_by');
