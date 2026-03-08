@@ -13,8 +13,18 @@ class UserController extends Controller
      */
     public function __invoke(Request $request): JsonResponse
     {
+        $user = $request->user();
+        $user->load('roles');
+
         return response()->json([
-            'user' => $request->user(),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'hourly_rate' => $user->hourly_rate,
+                'is_valid' => $user->is_valid,
+                'roles' => $user->roles->pluck('name')->values(),
+            ],
         ]);
     }
 }
