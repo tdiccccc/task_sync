@@ -2,18 +2,9 @@ import { z } from 'zod'
 import { extendZodWithOpenApi, type OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
 
 import { ProjectSchema } from '../../base/project/project'
+import { PaginationMetaSchema } from '../../base/shared/PaginationMetaSchema'
 
 extendZodWithOpenApi(z)
-
-/**
- * ページネーションメタ情報スキーマ
- */
-export const PaginationMetaSchema = z.object({
-  current_page: z.number().openapi({ example: 1 }),
-  last_page: z.number().openapi({ example: 5 }),
-  per_page: z.number().openapi({ example: 15 }),
-  total: z.number().openapi({ example: 73 }),
-})
 
 /**
  * プロジェクト一覧レスポンスのスキーマ
@@ -58,8 +49,8 @@ export function registerGetProjectListPath(registry: OpenAPIRegistry): void {
   })
 }
 
-/** ページネーションメタ情報の型 */
-export type PaginationMeta = z.infer<typeof PaginationMetaSchema>
+/** PaginationMeta型をre-export */
+export type { PaginationMeta } from '../../base/shared/PaginationMetaSchema'
 
 /** プロジェクト一覧レスポンスの型 */
 export type GetProjectListResponse = z.infer<typeof GetProjectListResponseSchema>
