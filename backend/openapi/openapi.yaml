@@ -9,10 +9,55 @@ servers:
   - url: http://localhost:8200
     description: ローカル開発環境
 tags:
+  - name: Auth
+    description: 認証
   - name: Projects
     description: プロジェクト管理
 components:
   schemas:
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: メールアドレス
+          example: user@example.com
+        password:
+          type: string
+          minLength: 1
+          description: パスワード
+          example: password
+      required:
+        - email
+        - password
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: 認証トークン
+          example: 1|abcdef...
+        user:
+          type: object
+          properties:
+            id:
+              type: number
+              example: 1
+            name:
+              type: string
+              example: 山田太郎
+            email:
+              type: string
+              format: email
+              example: user@example.com
+          required:
+            - id
+            - name
+            - email
+      required:
+        - token
+        - user
     CreateProjectRequest:
       type: object
       properties:
@@ -57,6 +102,42 @@ components:
         - description
   parameters: {}
 paths:
+  /api/login:
+    post:
+      summary: ログイン
+      description: メールアドレスとパスワードで認証します
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: ログイン成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "422":
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                required:
+                  - message
+                  - errors
   /api/projects:
     post:
       summary: プロジェクト作成

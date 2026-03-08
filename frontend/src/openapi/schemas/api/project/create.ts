@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
+import { extendZodWithOpenApi, type OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
 
-import { DateTimeSchema } from '../base/shared/DateTimeSchema'
+import { DateTimeSchema } from '../../base/shared/DateTimeSchema'
 extendZodWithOpenApi(z)
 
 /**
@@ -51,6 +51,54 @@ export const CreateProjectResponseSchema = z.object({
   created_at: z.string(),
   updated_at: z.string(),
 })
+
+/**
+ * プロジェクト作成エンドポイントをレジストリに登録する
+ */
+export function registerCreateProjectPath(registry: OpenAPIRegistry): void {
+  registry.register('CreateProjectRequest', CreateProjectRequestSchema)
+
+  registry.registerPath({
+    method: 'post',
+    path: '/api/projects',
+    summary: 'プロジェクト作成',
+    description: '新しいプロジェクトを作成します',
+    tags: ['Projects'],
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: CreateProjectRequestSchema,
+          },
+        },
+      },
+    },
+    responses: {
+      201: {
+        description: 'プロジェクト作成成功',
+        content: {
+          'application/json': {
+            schema: CreateProjectResponseSchema,
+          },
+        },
+      },
+      400: {
+        description: 'バリデーションエラー',
+        content: {
+          'application/json': {
+            schema: z.object({
+              message: z.string(),
+              errors: z.record(z.string(), z.array(z.string())),
+            }),
+          },
+        },
+      },
+      401: {
+        description: '認証エラー',
+      },
+    },
+  })
+}
 
 /**
  * プロジェクト作成リクエストの型

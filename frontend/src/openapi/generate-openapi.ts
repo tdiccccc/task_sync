@@ -6,7 +6,8 @@ import {
 import { z } from 'zod'
 import * as fs from 'node:fs'
 import * as yaml from 'yaml'
-import { CreateProjectRequestSchema, CreateProjectResponseSchema } from './schemas/api/project'
+import { registerLoginPath } from './schemas/api/auth/login'
+import { registerCreateProjectPath } from './schemas/api/project/create'
 
 // Zodを拡張
 extendZodWithOpenApi(z)
@@ -14,52 +15,9 @@ extendZodWithOpenApi(z)
 // レジストリを作成
 const registry = new OpenAPIRegistry()
 
-// ===== スキーマを登録 =====
-registry.register('CreateProjectRequest', CreateProjectRequestSchema)
-
-// ===== APIエンドポイントを登録 =====
-
-// POST /api/projects - プロジェクト作成
-registry.registerPath({
-  method: 'post',
-  path: '/api/projects',
-  summary: 'プロジェクト作成',
-  description: '新しいプロジェクトを作成します',
-  tags: ['Projects'],
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: CreateProjectRequestSchema,
-        },
-      },
-    },
-  },
-  responses: {
-    201: {
-      description: 'プロジェクト作成成功',
-      content: {
-        'application/json': {
-          schema: CreateProjectResponseSchema,
-        },
-      },
-    },
-    400: {
-      description: 'バリデーションエラー',
-      content: {
-        'application/json': {
-          schema: z.object({
-            message: z.string(),
-            errors: z.record(z.string(), z.array(z.string())),
-          }),
-        },
-      },
-    },
-    401: {
-      description: '認証エラー',
-    },
-  },
-})
+// ===== スキーマ・エンドポイントを登録 =====
+registerLoginPath(registry)
+registerCreateProjectPath(registry)
 
 // ===== OpenAPI仕様を生成 =====
 const generator = new OpenApiGeneratorV3(registry.definitions)
@@ -81,6 +39,10 @@ const document = generator.generateDocument({
     },
   ],
   tags: [
+    {
+      name: 'Auth',
+      description: '認証',
+    },
     {
       name: 'Projects',
       description: 'プロジェクト管理',
