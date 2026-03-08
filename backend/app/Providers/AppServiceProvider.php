@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Domains\Project\Repositories\ProjectRepositoryInterface;
+use Infrastructure\Project\Repositories\EloquentProjectRepository;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            ProjectRepositoryInterface::class,
+            EloquentProjectRepository::class
+        );
     }
 
     /**

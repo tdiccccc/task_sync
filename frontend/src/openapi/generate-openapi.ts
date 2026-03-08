@@ -8,6 +8,10 @@ import * as fs from 'node:fs'
 import * as yaml from 'yaml'
 import { registerLoginPath } from './schemas/api/auth/login'
 import { registerCreateProjectPath } from './schemas/api/project/create'
+import { registerGetProjectListPath } from './schemas/api/project/list'
+import { registerGetProjectDetailPath } from './schemas/api/project/detail'
+import { registerUpdateProjectPath } from './schemas/api/project/update'
+import { registerDeleteProjectPath } from './schemas/api/project/delete'
 import { registerGetUserPath } from './schemas/api/user/get'
 
 // Zodを拡張
@@ -20,6 +24,10 @@ const registry = new OpenAPIRegistry()
 registerLoginPath(registry)
 registerCreateProjectPath(registry)
 registerGetUserPath(registry)
+registerGetProjectListPath(registry)
+registerGetProjectDetailPath(registry)
+registerUpdateProjectPath(registry)
+registerDeleteProjectPath(registry)
 
 // ===== OpenAPI仕様を生成 =====
 const generator = new OpenApiGeneratorV3(registry.definitions)

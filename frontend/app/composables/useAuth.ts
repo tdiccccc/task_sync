@@ -1,46 +1,13 @@
-import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
 import type { User } from '~~/src/openapi/schemas/base/user'
 import type { GetUserResponse } from '~~/src/openapi/schemas/api/user/get'
 
 export const useAuth = () => {
-  const config = useRuntimeConfig()
-  const apiBase = config.public.apiBase as string
+  const { apiFetch, initCsrf } = useApi() // ← useApiから取得
 
   const user = useState<User | null>('auth-user', () => null)
   const isInitialized = useState<boolean>('auth-initialized', () => false)
 
   const isAuthenticated = computed(() => user.value !== null)
-
-  const getCsrfToken = (): string | undefined => {
-    return useCookie('XSRF-TOKEN').value ?? undefined
-  }
-
-  const apiFetch = async <T>(
-    path: string,
-    options: NitroFetchOptions<NitroFetchRequest> = {}
-  ): Promise<T> => {
-    const csrfToken = getCsrfToken()
-
-    const headers: Record<string, string> = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      ...(csrfToken ? { 'X-XSRF-TOKEN': decodeURIComponent(csrfToken) } : {}),
-    }
-
-    return await $fetch<T>(path, {
-      baseURL: apiBase,
-      credentials: 'include',
-      headers,
-      ...options,
-    })
-  }
-
-  const initCsrf = async (): Promise<void> => {
-    await $fetch('/sanctum/csrf-cookie', {
-      baseURL: apiBase,
-      credentials: 'include',
-    })
-  }
 
   const fetchUser = async (): Promise<void> => {
     try {
@@ -51,12 +18,8 @@ export const useAuth = () => {
     }
   }
 
-  /**
-   * アプリ起動時の初期化処理
-   * CSRF Cookieの取得とユーザー情報の取得を行う
-   */
   const init = async (): Promise<void> => {
-    if (isInitialized.value) return // 二重初期化を防止
+    if (isInitialized.value) return
 
     await initCsrf()
     await fetchUser()
