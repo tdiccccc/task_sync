@@ -19,12 +19,21 @@ const emit = defineEmits<{
   submit: [data: CreateProjectRequest]
 }>()
 
-const form = reactive<CreateProjectRequest>({
+interface FormState {
+  name: string
+  amount: number
+  description: string
+  started_at: string
+  ended_at: string
+  is_active: boolean
+}
+
+const form = reactive<FormState>({
   name: props.initialData.name ?? '',
   amount: props.initialData.amount ?? 0,
   description: props.initialData.description ?? '',
-  started_at: props.initialData.started_at ?? null,
-  ended_at: props.initialData.ended_at ?? null,
+  started_at: props.initialData.started_at ?? '',
+  ended_at: props.initialData.ended_at ?? '',
   is_active: props.initialData.is_active ?? true,
 })
 
@@ -33,7 +42,13 @@ const fieldErrors = ref<Record<string, string[]>>({})
 const handleSubmit = () => {
   fieldErrors.value = {}
 
-  const result = CreateProjectRequestSchema.safeParse(form)
+  const payload = {
+    ...form,
+    started_at: form.started_at || null,
+    ended_at: form.ended_at || null,
+  }
+
+  const result = CreateProjectRequestSchema.safeParse(payload)
   if (!result.success) {
     fieldErrors.value = result.error.flatten().fieldErrors as Record<string, string[]>
     return
@@ -62,12 +77,17 @@ const submitLabel = computed(() => {
     <!-- 金額 -->
     <div>
       <AppLabel for="amount">金額</AppLabel>
-      <Input
+      <input
         id="amount"
-        v-model="form.amount"
+        v-model.number="form.amount"
         type="number"
-        :error="!!fieldErrors.amount"
         placeholder="0"
+        class="mt-1 block w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-1"
+        :class="
+          fieldErrors.amount
+            ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+            : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
+        "
       />
       <p v-if="fieldErrors.amount" class="mt-1 text-sm text-red-600">
         {{ fieldErrors.amount[0] }}
