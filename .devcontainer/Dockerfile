@@ -49,4 +49,7 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 # Claude CLI のインストール
 RUN npm install -g @anthropic-ai/claude-code
 
+# Xdebug 設定をテンプレートから適用
+COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
 WORKDIR /workspace
