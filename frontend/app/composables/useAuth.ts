@@ -1,10 +1,6 @@
 import type { NitroFetchOptions, NitroFetchRequest } from 'nitropack'
-
-interface User {
-  id: number
-  name: string
-  email: string
-}
+import type { User } from '~~/src/openapi/schemas/base/user'
+import type { GetUserResponse } from '~~/src/openapi/schemas/api/user/get'
 
 export const useAuth = () => {
   const config = useRuntimeConfig()
@@ -48,7 +44,7 @@ export const useAuth = () => {
 
   const fetchUser = async (): Promise<void> => {
     try {
-      const response = await apiFetch<{ user: User }>('/api/user')
+      const response = await apiFetch<GetUserResponse>('/api/user')
       user.value = response.user
     } catch {
       user.value = null

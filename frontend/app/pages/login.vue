@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { Label } from 'reka-ui'
-//frontend/src/openapi/schemas/api/auth/login.ts
 import { LoginRequestSchema, type LoginRequest } from '~~/src/openapi/schemas/api/auth/login'
 
-const { user, login, logout } = useAuth()
+definePageMeta({
+  layout: 'auth',
+})
+
+const { login } = useAuth()
 
 const form = reactive<LoginRequest>({
   email: '',
@@ -29,6 +32,7 @@ const handleLogin = async () => {
   loading.value = true
   try {
     await login(result.data.email, result.data.password)
+    await navigateTo('/')
   } catch (e: unknown) {
     if (e && typeof e === 'object' && 'data' in e) {
       const data = (e as { data: { message?: string; errors?: Record<string, string[]> } }).data
@@ -46,44 +50,14 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
-
-const handleLogout = async () => {
-  loading.value = true
-  try {
-    await logout()
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      generalError.value = e.message
-    }
-  } finally {
-    loading.value = false
-  }
-}
 </script>
 
 <template>
-  <div class="mx-auto mt-20 max-w-md px-4">
+  <div class="w-full max-w-md px-4">
     <h1 class="text-2xl font-bold text-gray-900">ログイン</h1>
-
-    <!-- ログイン済み表示 -->
-    <div v-if="user" class="mt-6 rounded-lg border border-gray-200 bg-white p-6">
-      <p class="text-gray-700">
-        ログイン中:
-        <strong class="text-gray-900">{{ user.name }}</strong>
-        ({{ user.email }})
-      </p>
-      <button
-        :disabled="loading"
-        class="mt-4 rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
-        @click="handleLogout"
-      >
-        ログアウト
-      </button>
-    </div>
 
     <!-- ログインフォーム -->
     <form
-      v-else
       class="mt-6 space-y-4 rounded-lg border border-gray-200 bg-white p-6"
       @submit.prevent="handleLogin"
     >
