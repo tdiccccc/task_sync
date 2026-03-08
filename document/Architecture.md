@@ -1,5 +1,49 @@
 # アーキテクチャ図
 
+## フロントエンド設計思想
+
+### ヘッドレスコンポーネントアーキテクチャ
+
+本プロジェクトのフロントエンドは**ヘッドレスコンポーネント**の設計思想を採用する。
+
+#### 基本原則
+
+- **ロジックと見た目の分離**: コンポーネントの振る舞い（状態管理・アクセシビリティ・キーボード操作）をUIの見た目から分離する
+- **スタイルの自由度**: ヘッドレスコンポーネントはスタイルを持たず、Tailwind CSSのユーティリティクラスで外観を定義する
+- **アクセシビリティの担保**: WAI-ARIA準拠のインタラクションをヘッドレスコンポーネントが提供し、開発者が個別に実装する必要をなくす
+
+#### 技術選定
+
+| ライブラリ | 役割 |
+|---|---|
+| **Reka UI** | ヘッドレスUIプリミティブ（Dialog, Menu, Select, Tabs等） |
+| **Tailwind CSS** | ユーティリティファーストのスタイリング |
+
+#### コンポーネント設計方針
+
+```
+UIコンポーネント = Reka UI（振る舞い） + Tailwind CSS（見た目）
+```
+
+- Reka UIが提供するプリミティブを使い、プロジェクト固有のデザインを Tailwind CSS で適用する
+- 再利用可能なUIパーツは `app/components/ui/` に配置し、Reka UIをラップした形で提供する
+- ページ固有のコンポーネントは `app/components/` 配下に機能単位で配置する
+
+#### レイヤー構造
+
+```
+app/
+├── components/
+│   ├── ui/              # Reka UI ラッパー（プロジェクト共通UI部品）
+│   │   ├── UiButton.vue
+│   │   ├── UiDialog.vue
+│   │   └── UiSelect.vue
+│   └── <feature>/       # 機能単位のコンポーネント
+├── composables/         # ロジックの再利用（状態管理・API通信）
+├── pages/               # ページコンポーネント
+└── layouts/             # レイアウト
+```
+
 ## システム全体構成
 
 ```mermaid
@@ -11,7 +55,11 @@ graph TB
 
     subgraph Frontend["フロントエンド Nuxt3 SPA"]
         Vue[Vue Components]
+        RekaUI[Reka UI]
+        TailwindCSS[Tailwind CSS]
         Zod[Zod Schemas]
+        Vue --> RekaUI
+        Vue --> TailwindCSS
         Vue --> Zod
     end
 
