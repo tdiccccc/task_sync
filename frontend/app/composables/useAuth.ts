@@ -11,6 +11,9 @@ export const useAuth = () => {
   const apiBase = config.public.apiBase as string
 
   const user = useState<User | null>('auth-user', () => null)
+  const isInitialized = useState<boolean>('auth-initialized', () => false)
+
+  const isAuthenticated = computed(() => user.value !== null)
 
   const getCsrfToken = (): string | undefined => {
     return useCookie('XSRF-TOKEN').value ?? undefined
@@ -43,6 +46,27 @@ export const useAuth = () => {
     })
   }
 
+  const fetchUser = async (): Promise<void> => {
+    try {
+      const response = await apiFetch<{ user: User }>('/api/user')
+      user.value = response.user
+    } catch {
+      user.value = null
+    }
+  }
+
+  /**
+   * アプリ起動時の初期化処理
+   * CSRF Cookieの取得とユーザー情報の取得を行う
+   */
+  const init = async (): Promise<void> => {
+    if (isInitialized.value) return // 二重初期化を防止
+
+    await initCsrf()
+    await fetchUser()
+    isInitialized.value = true
+  }
+
   const login = async (email: string, password: string): Promise<void> => {
     await initCsrf()
     await apiFetch('/api/login', {
@@ -59,16 +83,11 @@ export const useAuth = () => {
     user.value = null
   }
 
-  const fetchUser = async (): Promise<void> => {
-    try {
-      user.value = await apiFetch<User>('/api/user')
-    } catch {
-      user.value = null
-    }
-  }
-
   return {
     user: readonly(user),
+    isAuthenticated,
+    isInitialized: readonly(isInitialized),
+    init,
     login,
     logout,
     fetchUser,
