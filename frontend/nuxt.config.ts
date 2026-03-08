@@ -8,6 +8,11 @@ export default defineNuxtConfig({
     port: Number(process.env.NUXT_DEV_SERVER_PORT) || 5173,
   },
   devtools: { enabled: true },
+  components: [
+    { path: '~/components/atoms', pathPrefix: false },
+    { path: '~/components/molecules', pathPrefix: false },
+    { path: '~/components/organisms', pathPrefix: false },
+  ],
   modules: ['@nuxt/eslint'],
   css: ['~/assets/css/main.css'],
   vite: {

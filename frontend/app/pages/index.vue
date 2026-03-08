@@ -61,25 +61,21 @@ const roleLabel = computed(() => {
       <h1 class="text-2xl font-bold text-gray-900">ようこそ、{{ user?.name }}さん</h1>
       <p class="mt-1 text-sm text-gray-500">
         ロール:
-        <span
-          class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
-        >
+        <Badge :variant="isAdmin ? 'admin' : 'default'">
           {{ roleLabel }}
-        </span>
+        </Badge>
       </p>
     </div>
 
     <!-- メニューカード -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <NuxtLink
+      <LinkCard
         v-for="card in menuCards"
         :key="card.to"
         :to="card.to"
-        class="block rounded-lg border border-gray-200 bg-white p-6 transition-all hover:border-blue-300 hover:shadow-md"
-      >
-        <h3 class="text-lg font-semibold text-gray-900">{{ card.title }}</h3>
-        <p class="mt-2 text-sm text-gray-500">{{ card.description }}</p>
-      </NuxtLink>
+        :title="card.title"
+        :description="card.description"
+      />
     </div>
 
     <!-- 管理者メニュー（adminのみ） -->
@@ -87,15 +83,14 @@ const roleLabel = computed(() => {
       <div class="mt-8 border-t border-gray-200 pt-6">
         <h2 class="mb-4 text-lg font-semibold text-gray-900">管理者メニュー</h2>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <NuxtLink
+          <LinkCard
             v-for="card in adminCards"
             :key="card.to"
             :to="card.to"
-            class="block rounded-lg border border-orange-200 bg-orange-50 p-6 transition-all hover:border-orange-300 hover:shadow-md"
-          >
-            <h3 class="text-lg font-semibold text-gray-900">{{ card.title }}</h3>
-            <p class="mt-2 text-sm text-gray-500">{{ card.description }}</p>
-          </NuxtLink>
+            :title="card.title"
+            :description="card.description"
+            variant="admin"
+          />
         </div>
       </div>
     </template>
