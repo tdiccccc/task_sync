@@ -55,4 +55,7 @@ docker run --rm \
   -t /local/openapi/templates \
   --global-property models
 
+# *Request.php 以外の不要な生成物（レスポンスクラス等）を削除
+find "$BACKEND_DIR/app/Http/Requests" -name '*.php' ! -name '*Request.php' -delete
+
 echo "✅ FormRequestの生成が完了しました: backend/app/Http/Requests/"
