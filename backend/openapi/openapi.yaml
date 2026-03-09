@@ -227,6 +227,102 @@ components:
         - amount
         - description
         - is_active
+    TaskCategory:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        project_id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: 設計
+        description:
+          type: string
+          nullable: true
+          example: UI/UX設計作業
+        color:
+          type: string
+          nullable: true
+          example: "#3B82F6"
+        sort_order:
+          type: number
+          example: 0
+        created_at:
+          type: string
+          example: 2024-01-01T00:00:00Z
+        updated_at:
+          type: string
+          example: 2024-01-01T00:00:00Z
+      required:
+        - id
+        - project_id
+        - name
+        - description
+        - color
+        - sort_order
+        - created_at
+        - updated_at
+    CreateTaskCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: カテゴリ名
+          example: 設計
+        description:
+          type: string
+          nullable: true
+          maxLength: 500
+          description: 説明
+          example: UI/UX設計作業
+        color:
+          type: string
+          nullable: true
+          pattern: ^#[0-9A-Fa-f]{6}$
+          description: カラーコード
+          example: "#3B82F6"
+        sort_order:
+          type: integer
+          minimum: 0
+          default: 0
+          description: 表示順
+          example: 0
+      required:
+        - name
+    UpdateTaskCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: カテゴリ名
+          example: 設計（更新）
+        description:
+          type: string
+          nullable: true
+          maxLength: 500
+          description: 説明
+          example: UI/UX設計作業（スコープ変更）
+        color:
+          type: string
+          nullable: true
+          pattern: ^#[0-9A-Fa-f]{6}$
+          description: カラーコード
+          example: "#EF4444"
+        sort_order:
+          type: integer
+          minimum: 0
+          description: 表示順
+          example: 1
+      required:
+        - name
+        - sort_order
   parameters: {}
 paths:
   /api/login:
@@ -519,3 +615,166 @@ paths:
           description: 認証エラー
         "404":
           description: プロジェクトが見つかりません
+  /api/projects/{projectId}/categories:
+    get:
+      summary: タスクカテゴリ一覧取得
+      description: 指定されたプロジェクトのタスクカテゴリ一覧を取得します
+      tags:
+        - TaskCategories
+      parameters:
+        - schema:
+            type: number
+            example: 1
+          required: true
+          name: projectId
+          in: path
+      responses:
+        "200":
+          description: タスクカテゴリ一覧取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TaskCategory"
+                required:
+                  - data
+        "401":
+          description: 認証エラー
+        "404":
+          description: プロジェクトが見つかりません
+    post:
+      summary: タスクカテゴリ作成
+      description: 指定されたプロジェクトに新しいタスクカテゴリを作成します
+      tags:
+        - TaskCategories
+      parameters:
+        - schema:
+            type: number
+            example: 1
+          required: true
+          name: projectId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTaskCategoryRequest"
+      responses:
+        "201":
+          description: タスクカテゴリ作成成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TaskCategory"
+                required:
+                  - data
+        "400":
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                required:
+                  - message
+                  - errors
+        "401":
+          description: 認証エラー
+        "404":
+          description: プロジェクトが見つかりません
+  /api/categories/{id}:
+    put:
+      summary: タスクカテゴリ更新
+      description: 指定されたタスクカテゴリを更新します
+      tags:
+        - TaskCategories
+      parameters:
+        - schema:
+            type: number
+            example: 1
+          required: true
+          name: id
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTaskCategoryRequest"
+      responses:
+        "200":
+          description: タスクカテゴリ更新成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TaskCategory"
+                required:
+                  - data
+        "400":
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                required:
+                  - message
+                  - errors
+        "401":
+          description: 認証エラー
+        "404":
+          description: タスクカテゴリが見つかりません
+    delete:
+      summary: タスクカテゴリ削除
+      description: 指定されたタスクカテゴリを削除します
+      tags:
+        - TaskCategories
+      parameters:
+        - schema:
+            type: number
+            example: 1
+          required: true
+          name: id
+          in: path
+      responses:
+        "200":
+          description: タスクカテゴリ削除成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: タスクカテゴリを削除しました
+                required:
+                  - message
+        "401":
+          description: 認証エラー
+        "404":
+          description: タスクカテゴリが見つかりません

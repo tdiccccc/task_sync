@@ -13,6 +13,10 @@ import { registerGetProjectDetailPath } from './schemas/api/project/detail'
 import { registerUpdateProjectPath } from './schemas/api/project/update'
 import { registerDeleteProjectPath } from './schemas/api/project/delete'
 import { registerGetUserPath } from './schemas/api/user/get'
+import { registerGetTaskCategoryListPath } from './schemas/api/task-category/list'
+import { registerCreateTaskCategoryPath } from './schemas/api/task-category/create'
+import { registerUpdateTaskCategoryPath } from './schemas/api/task-category/update'
+import { registerDeleteTaskCategoryPath } from './schemas/api/task-category/delete'
 
 // Zodを拡張
 extendZodWithOpenApi(z)
@@ -28,6 +32,10 @@ registerGetProjectListPath(registry)
 registerGetProjectDetailPath(registry)
 registerUpdateProjectPath(registry)
 registerDeleteProjectPath(registry)
+registerGetTaskCategoryListPath(registry)
+registerCreateTaskCategoryPath(registry)
+registerUpdateTaskCategoryPath(registry)
+registerDeleteTaskCategoryPath(registry)
 
 // ===== OpenAPI仕様を生成 =====
 const generator = new OpenApiGeneratorV3(registry.definitions)
