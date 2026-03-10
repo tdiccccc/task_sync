@@ -50,6 +50,6 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 RUN npm install -g @anthropic-ai/claude-code
 
 # Xdebug 設定をテンプレートから適用
-COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+COPY .devcontainer/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 WORKDIR /workspace
